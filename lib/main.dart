@@ -1,3 +1,5 @@
+import 'package:finance/create_transaction_page.dart';
+import 'package:finance/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -7,6 +9,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _navigatorKey = GlobalKey<NavigatorState>();
+
     return MaterialApp(
         title: 'Finance',
         home: Scaffold(
@@ -17,7 +21,9 @@ class MyApp extends StatelessWidget {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                _navigatorKey.currentState?.pushNamed('/transactions/create');
+              },
               tooltip: 'Increment',
               child: const Icon(Icons.add),
               elevation: 0,
@@ -29,7 +35,10 @@ class MyApp extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: IconButton(
-                        icon: const Icon(Icons.home), onPressed: () {}),
+                        icon: const Icon(Icons.home),
+                        onPressed: () {
+                          _navigatorKey.currentState?.pushNamed('/');
+                        }),
                   ),
                   Expanded(
                     child: IconButton(
@@ -50,8 +59,27 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
               elevation: 0,
             ),
-            body: const Center(
-              child: Text('Hello Finance'),
+            body: Navigator(
+              key: _navigatorKey,
+              initialRoute: '/',
+              onGenerateRoute: (RouteSettings settings) {
+                WidgetBuilder builder;
+                switch (settings.name) {
+                  case '/':
+                    builder = (BuildContext context) => const DashboardPage();
+                    break;
+                  case '/transactions/create':
+                    builder =
+                        (BuildContext context) => const CreateTransactionPage();
+                    break;
+                  default:
+                    throw Exception('Invalid route: ${settings.name}');
+                }
+                return MaterialPageRoute(
+                  builder: builder,
+                  settings: settings,
+                );
+              },
             ),
             backgroundColor: const Color(0xF0FFFFFF)));
   }
