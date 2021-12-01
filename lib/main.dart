@@ -81,6 +81,7 @@ class MyApp extends StatelessWidget {
                 );
               },
             ),
-            backgroundColor: const Color(0xF0FFFFFF)));
+            backgroundColor: const Color(0xF0FFFFFF),
+            resizeToAvoidBottomInset: false));
   }
 }
